@@ -46,7 +46,7 @@ MainMenu.prototype = {
   }
 }
 
-var Play = function(game) {};
+var Play = function(game) {this.ghost;};
 Play.prototype = {
   preload: function(){
     console.log('Play: preload');
@@ -94,7 +94,7 @@ Play.prototype = {
     makeSpikes(0, 1128, 12);
 
     //Player
-    player = game.add.sprite(32, 250, 'pAtlas', lastFrame);
+    player = game.add.sprite(32, 32, 'pAtlas', lastFrame);
     player.anchor.set(0.5);
     player.scale.setTo(.1,.1);
     game.physics.arcade.enable(player);
@@ -117,17 +117,17 @@ Play.prototype = {
     //sideAtt.body.setSize(0, 0, 0, 0);
 
     //Ghost
-    ghost = game.add.sprite(140, 860, 'ghost', '4');
-    ghost.anchor.set(0.5);
-    ghost.scale.setTo(1.5,1.5);
-    game.physics.arcade.enable(ghost);
-    ghost.body.setSize(24, 32, 5, 0);
-    //Animations
-    //Moving ghost left
-    ghost.animations.add('left', [0, 1, 2, 3, 4, 5], 10, true);
-    //Moving ghost right
-    //ghost.animations.add('right', [4, 5, 6, 7], 10, true);
-    ghost.animations.play('left');
+    this.ghost1 = new ghosts(game, 'ghost', '4', 140, 860, 1.5);
+    game.add.existing(this.ghost1);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 32, 200, 1.5);
+    game.add.existing(this.ghost2);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 390, 500, 1.5);
+    game.add.existing(this.ghost3);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 420, 900, 1.5);
+    game.add.existing(this.ghost4);
+    this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, 1.5);
+    game.add.existing(this.ghost5);
+
 
     //Hearts
     hearts = game.add.group();
@@ -197,6 +197,24 @@ Play.prototype = {
         ivFrame = true;
       }
     }
+    //Plays sound and decrements health when the player hits ghost
+    if(game.physics.arcade.overlap(player, this.ghost1) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost2) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost3) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost4) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost5) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    }
+
 
     //IV Frames
     if(ivFrame == true){
@@ -231,12 +249,14 @@ Play.prototype = {
     }
 
     //Checks if the player has moved off of the spikes to reset
-    if(game.physics.arcade.overlap(player, spikes) == false && hurt == true){
+    if(game.physics.arcade.overlap(player, spikes) == false
+    && game.physics.arcade.overlap(player, this.ghost1) == false
+    && game.physics.arcade.overlap(player, this.ghost2) == false
+    && game.physics.arcade.overlap(player, this.ghost3) == false
+    && game.physics.arcade.overlap(player, this.ghost4) == false
+    && game.physics.arcade.overlap(player, this.ghost5) == false
+    && hurt == true && ivFrame == false){
       hurt = false;
-    }
-    //Ghost collision with attack
-    if(game.physics.arcade.overlap(ghost, sideAtt) == true){
-      ghost.kill();
     }
 
     //Attack
@@ -309,6 +329,16 @@ function makeHitBox(){
 //Destroys the hitbox off the attack
 function killBox(){
   sideAtt.destroy();
+}
+
+function ouch(){
+  oof.play();
+  hurt = true;
+  heartNum -= .5;
+  health(heartNum);
+  if(ivFrame == false){
+    ivFrame = true;
+  }
 }
 
 //Updates the players current health
