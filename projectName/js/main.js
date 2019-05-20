@@ -7,7 +7,7 @@ Github: https://github.com/jcressa/illinoisJohnny
 var game= new Phaser.Game(600, 600, Phaser.AUTO);
 var playerGravity = 2000;
 var playerJump = 725
-var playerSpeed = 250;
+var playerSpeed = 350;
 var yHeart = 16;
 var hurt = false;
 var heartNum = 3;
@@ -41,13 +41,13 @@ MainMenu.prototype = {
   },
   update: function(){
     if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-      game.state.start('Play');
+      game.state.start('Level1');
     }
   }
 }
 
-var Play = function(game) {this.ghost;};
-Play.prototype = {
+var Level1 = function(game) {this.ghost;};
+Level1.prototype = {
   preload: function(){
     console.log('Play: preload');
     game.load.image('ground', 'assets/img/platform.png');
@@ -55,12 +55,14 @@ Play.prototype = {
     game.load.image('spike', 'assets/img/spikes_24.png');
     game.load.image('heart', 'assets/img/heart_full.png');
     game.load.image('heartHalf', 'assets/img/heart_half.png');
+    game.load.image('door', 'assets/img/door.png');
     game.load.audio('oof', 'assets/audio/oof.mp3');
     game.load.atlas('pAtlas', 'assets/img/player.png', 'assets/img/player.json');
     //game.load.atlas('gAtlas', 'assets/img/ghost.png', 'assets/img/ghost.json');
     game.load.tilemap('level', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.spritesheet('tilesheet', 'assets/img/B1.png');
     game.load.spritesheet('ghost', 'assets/img/ghost.png', 32, 24);
+    game.load.spritesheet('player', 'assets/img/player2.png', 32, 24);
     game.stage.backgroundColor = "#8A8A8A";
   },
   create: function(){
@@ -93,20 +95,26 @@ Play.prototype = {
     makeSpikes(408, 960, 4);
     makeSpikes(0, 1128, 12);
 
+    //door
+    door = game.add.sprite(450, 1050, 'door');
+    door.scale.setTo(.15, .15);
+    game.physics.arcade.enable(door);
+
     //Player
-    player = game.add.sprite(32, 32, 'pAtlas', lastFrame);
+    player = game.add.sprite(32, 32, 'player', '0');
     player.anchor.set(0.5);
-    player.scale.setTo(.1,.1);
+    player.scale.setTo(1.5, 1.5);
     game.physics.arcade.enable(player);
+    player.body.setSize(24, 32, 5, 0);
     player.body.bounce.y = 0;
     player.body.gravity.y = playerGravity;
     player.body.collideWorldBounds = true;
 
     //Animations
     //Moving player left
-    pLeft = player.animations.add('left', [0, 1, 2, 3], 10, true);
+    pLeft = player.animations.add('left', [4, 5, 6], 10, true);
     //Moving player right
-    pRight = player.animations.add('right', [5, 6, 7, 8], 10, true);
+    pRight = player.animations.add('right', [1, 2, 3], 10, true);
 
     //Hitboxes
     hitboxes = game.add.group();
@@ -116,14 +124,14 @@ Play.prototype = {
     sideAtt.body.enable = false;
     //sideAtt.body.setSize(0, 0, 0, 0);
 
-    //Ghost
+    //Create ghosts
     this.ghost1 = new ghosts(game, 'ghost', '4', 140, 860, 1.5);
     game.add.existing(this.ghost1);
     this.ghost2 = new ghosts(game, 'ghost', '4', 32, 200, 1.5);
     game.add.existing(this.ghost2);
     this.ghost3 = new ghosts(game, 'ghost', '4', 390, 500, 1.5);
     game.add.existing(this.ghost3);
-    this.ghost4 = new ghosts(game, 'ghost', '4', 420, 900, 1.5);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 470, 850, 1.5);
     game.add.existing(this.ghost4);
     this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, 1.5);
     game.add.existing(this.ghost5);
@@ -160,21 +168,259 @@ Play.prototype = {
         player.body.velocity.x = -playerSpeed;
         player.animations.play('left');
         last = 0;
-        lastFrame = 3;
+        lastFrame = 4;
       }else if(cursors.right.isDown){
         //Moving right
         player.body.velocity.x = playerSpeed;
         player.animations.play('right');
         last = 1;
-        lastFrame = 5;
+        lastFrame = 1;
       }else{
         //Standing
         if(last == 0){
           //player.animations.play('iLeft');
-          player.frame = 3;
+          player.frame = 4;
         } else {
           //player.animations.play('iRight');
-          player.frame = 5;
+          player.frame = 1;
+        }
+        //player.frame = 4;
+      }
+      player.body.gravity.y = playerGravity;
+
+      //Player can jump if they're on the ground
+      if (cursors.up.isDown && this.isGrounded){
+        player.body.velocity.y = -playerJump;
+      }
+    }
+
+    //Plays sound and decrements health when the player hits spikes
+    if(game.physics.arcade.overlap(player, spikes) == true && hurt == false
+    && ivFrame == false){
+      oof.play();
+      hurt = true;
+      heartNum -= .5;
+      health(heartNum);
+      if(ivFrame == false){
+        ivFrame = true;
+      }
+    }
+    //Plays sound and decrements health when the player hits ghost
+    if(game.physics.arcade.overlap(player, this.ghost1) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost2) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost3) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost4) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    } else if(game.physics.arcade.overlap(player, this.ghost5) == true
+    && hurt == false && ivFrame == false){
+      ouch();
+    }
+
+
+    //IV Frames
+    if(ivFrame == true){
+      if(ivCount < 120){
+        player.alpha = 0.5;
+        ivCount++;
+      } else {
+        player.alpha = 1;
+        ivFrame = false;
+        ivCount = 0;
+        hurt = false;
+      }
+    }
+
+    //In-game pause
+    if(game.input.keyboard.downDuration(Phaser.Keyboard.P)){
+      if(paused == false){
+        player.body.velocity.x = 0;
+        player.body.velocity.y = 0;
+        player.body.gravity.y = 0;
+        player.animations.stop(null, true);
+        paused = true;
+        pauseText.x = game.camera.x + 120;
+        pauseText.y = game.camera.y + 250;
+        pauseText.alpha = 1;
+      } else {
+        paused = false;
+        player.animations.play('left');
+        player.body.gravity.y = playerGravity;
+        pauseText.alpha = 0;
+      }
+    }
+
+    //Checks if the player has moved off of the spikes to reset
+    if(game.physics.arcade.overlap(player, spikes) == false
+    && game.physics.arcade.overlap(player, this.ghost1) == false
+    && game.physics.arcade.overlap(player, this.ghost2) == false
+    && game.physics.arcade.overlap(player, this.ghost3) == false
+    && game.physics.arcade.overlap(player, this.ghost4) == false
+    && game.physics.arcade.overlap(player, this.ghost5) == false
+    && hurt == true && ivFrame == false){
+      hurt = false;
+    }
+
+    //Attack
+    if(game.input.keyboard.downDuration(Phaser.Keyboard.F)){
+      makeHitBox();
+      game.time.events.add(Phaser.Timer.SECOND * 1, killBox, this);
+    }
+
+    //door
+    if(game.physics.arcade.overlap(player, door) == true){
+      game.state.start('Level2');
+    }
+
+    //Death
+    if(dead == true){
+      game.state.start('GameOver');
+    }
+  },
+  render: function(){
+    //game.debug.body(sideAtt);
+    //game.debug.body(player);
+    //game.debug.body(ghost);
+  }
+}
+
+var Level2 = function(game) {this.ghost;};
+Level2.prototype = {
+  preload: function(){
+    console.log('Play: preload');
+    game.load.image('ground', 'assets/img/platform.png');
+    game.load.image('background', 'assets/img/B1.png');
+    game.load.image('spike', 'assets/img/spikes_24.png');
+    game.load.image('heart', 'assets/img/heart_full.png');
+    game.load.image('heartHalf', 'assets/img/heart_half.png');
+    game.load.audio('oof', 'assets/audio/oof.mp3');
+    game.load.atlas('pAtlas', 'assets/img/player.png', 'assets/img/player.json');
+    //game.load.atlas('gAtlas', 'assets/img/ghost.png', 'assets/img/ghost.json');
+    game.load.tilemap('level', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.spritesheet('tilesheet', 'assets/img/B1.png');
+    game.load.spritesheet('ghost', 'assets/img/ghost.png', 32, 24);
+    game.load.spritesheet('player', 'assets/img/player2.png', 32, 24);
+    game.stage.backgroundColor = "#8A8A8A";
+  },
+  create: function(){
+    console.log('Play: create');
+    //Reset player to alive state
+    dead = false;
+    heartNum = 3;
+    //Enable physics system
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+    //Set world bounds
+    game.world.setBounds(0, 0, 600, 1200);
+
+    //Add noise
+    oof = game.add.audio('oof');
+
+    //Background
+    //test = game.add.sprite(0,0, 'test');
+    back = game.add.sprite(0, 0, 'background');
+    this.map = game.add.tilemap('level');
+    this.map.addTilesetImage('textures', 'tilesheet');
+    this.map.setCollisionByExclusion([]);
+    this.mapLayer = this.map.createLayer('Tile Layer 1');
+    this.mapLayer.resizeWorld();
+
+    //Spikes
+    spikes = game.add.group();
+    makeSpikes(504, 288, 4);
+    makeSpikes(384, 528, 5);
+    makeSpikes(120, 648, 3);
+    makeSpikes(408, 960, 4);
+    makeSpikes(0, 1128, 12);
+
+    //Player
+    player = game.add.sprite(32, 32, 'player', '0');
+    player.anchor.set(0.5);
+    player.scale.setTo(1.5, 1.5);
+    game.physics.arcade.enable(player);
+    player.body.setSize(24, 32, 5, 0);
+    player.body.bounce.y = 0;
+    player.body.gravity.y = playerGravity;
+    player.body.collideWorldBounds = true;
+
+    //Animations
+    //Moving player left
+    pLeft = player.animations.add('left', [4, 5, 6], 10, true);
+    //Moving player right
+    pRight = player.animations.add('right', [1, 2, 3], 10, true);
+
+    //Hitboxes
+    hitboxes = game.add.group();
+    hitboxes.enableBody = true;
+    player.addChild(hitboxes);
+    sideAtt = hitboxes.create(0,0,null);
+    sideAtt.body.enable = false;
+    //sideAtt.body.setSize(0, 0, 0, 0);
+
+    //Create ghosts
+    this.ghost1 = new ghosts(game, 'ghost', '4', 140, 860, 1.5);
+    game.add.existing(this.ghost1);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 32, 200, 1.5);
+    game.add.existing(this.ghost2);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 390, 500, 1.5);
+    game.add.existing(this.ghost3);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 470, 850, 1.5);
+    game.add.existing(this.ghost4);
+    this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, 1.5);
+    game.add.existing(this.ghost5);
+
+
+    //Hearts
+    hearts = game.add.group();
+    health(heartNum);
+
+    //Pause text
+    pauseText = game.add.text(game.camera.x + 120, game.camera.y + 250, 'Paused', { fontSize: '100px', fill: '#000' });
+    pauseText.alpha = 0;
+
+    // make camera follow player
+    game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER, 0.2, 0.2);
+  },
+  update: function(){
+    //Hearts move ith camera
+    hearts.y = game.camera.y + 16;
+    //Player collisions
+    game.physics.arcade.collide(player, this.mapLayer);
+    game.physics.arcade.collide(this.mapLayer, spikes);
+
+    //Creates collision between player and platforms
+    this.isGrounded = player.body.blocked.down;
+    //var hitGround = game.physics.arcade.collide(player, this.mapLayer);
+    cursors = game.input.keyboard.createCursorKeys();
+    //Stop moving player
+    player.body.velocity.x = 0;
+
+    if(paused == false){
+      if(cursors.left.isDown){
+        //Moving left
+        player.body.velocity.x = -playerSpeed;
+        player.animations.play('left');
+        last = 0;
+        lastFrame = 4;
+      }else if(cursors.right.isDown){
+        //Moving right
+        player.body.velocity.x = playerSpeed;
+        player.animations.play('right');
+        last = 1;
+        lastFrame = 1;
+      }else{
+        //Standing
+        if(last == 0){
+          //player.animations.play('iLeft');
+          player.frame = 4;
+        } else {
+          //player.animations.play('iRight');
+          player.frame = 1;
         }
         //player.frame = 4;
       }
@@ -271,7 +517,7 @@ Play.prototype = {
     }
   },
   render: function(){
-    game.debug.body(sideAtt);
+    //game.debug.body(sideAtt);
     //game.debug.body(player);
     //game.debug.body(ghost);
   }
@@ -381,6 +627,7 @@ function health(heartNum){
 }
 
 game.state.add('MainMenu', MainMenu);
-game.state.add('Play', Play);
+game.state.add('Level1', Level1);
+game.state.add('Level2', Level2);
 game.state.add('GameOver', GameOver);
 game.state.start('MainMenu');
