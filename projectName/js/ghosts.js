@@ -18,7 +18,6 @@ function ghosts(game, key, frame, xPos, yPos, scale){
 
 ghosts.prototype = Object.create(Phaser.Sprite.prototype);
 ghosts.prototype.constructor = ghosts;
-
 ghosts.prototype.update = function(){
   hitGhost = game.physics.arcade.overlap(sideAtt, this);
 
