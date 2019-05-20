@@ -95,6 +95,7 @@ Level1.prototype = {
     makeSpikes(408, 960, 4);
     makeSpikes(0, 1128, 12);
 
+
     //door
     door = game.add.sprite(450, 1050, 'door');
     door.scale.setTo(.15, .15);
