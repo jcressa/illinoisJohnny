@@ -28,8 +28,9 @@ var Level1 = function(game) {this.ghost;};
 Level1.prototype = {
   preload: function(){
     console.log('Play: preload');
-    game.load.tilemap('level', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.spritesheet('tilesheet', 'assets/img/B1.png');
+    game.load.image('B1', 'assets/img/B1.png');
+    game.load.tilemap('level1', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.spritesheet('Level1', 'assets/img/B1.png');
   },
   create: function(){
     console.log('Play: create');
@@ -46,9 +47,9 @@ Level1.prototype = {
 
     //Background
     //test = game.add.sprite(0,0, 'test');
-    back = game.add.sprite(0, 0, 'background');
-    this.map = game.add.tilemap('level');
-    this.map.addTilesetImage('textures', 'tilesheet');
+    back = game.add.sprite(0, 0, 'B1');
+    this.map = game.add.tilemap('level1');
+    this.map.addTilesetImage('textures', 'Level1');
     this.map.setCollisionByExclusion([]);
     this.mapLayer = this.map.createLayer('Tile Layer 1');
     this.mapLayer.resizeWorld();
