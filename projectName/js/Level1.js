@@ -4,6 +4,7 @@ Group #: 55
 Names: Joey Cressa, Eric Tseng, Sandy Evsanaa
 Github: https://github.com/jcressa/illinoisJohnny
 */
+
 var playerGravity = 2000;
 var playerJump = 725
 var playerSpeed = 350;
@@ -16,11 +17,12 @@ var heart3;
 var dead = false;
 var ghostCounter = 0;
 var last = 0;
-var lastFrame = 0;
+var lastFrame = 5;
 var ivCount = 0;
 var ivFrame = false;
 var paused = false;
 var pauseText;
+
 
 var Level1 = function(game) {this.ghost;};
 Level1.prototype = {
@@ -66,11 +68,11 @@ Level1.prototype = {
     door.body.setSize(200,400,280,300);
 
     //Player
-    player = game.add.sprite(32, 32, 'player', lastFrame);
+    player = game.add.sprite(32, 32, 'player', '0');
     player.anchor.set(0.5);
     player.scale.setTo(1.5, 1.5);
     game.physics.arcade.enable(player);
-    player.body.setSize(24, 36, 5, 0);
+    player.body.setSize(24, 32, 5, 0);
     player.body.bounce.y = 0;
     player.body.gravity.y = playerGravity;
     player.body.collideWorldBounds = true;
@@ -89,16 +91,17 @@ Level1.prototype = {
     sideAtt.body.enable = false;
 
     //Create ghosts
-    this.ghost1 = new ghosts(game, 'ghost', 4, 130, 920, 1.5);
+    this.ghost1 = new ghosts(game, 'ghost', '4', 130, 920, 1.5);
     game.add.existing(this.ghost1);
-    this.ghost2 = new ghosts(game, 'ghost', 4, 400, 160, 1.5);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 400, 160, 1.5);
     game.add.existing(this.ghost2);
-    this.ghost3 = new ghosts(game, 'ghost', 4, 340, 1110, 1.5);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 340, 1110, 1.5);
     game.add.existing(this.ghost3);
-    this.ghost4 = new ghosts(game, 'ghost', 4, 430, 920, 1.5);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 430, 920, 1.5);
     game.add.existing(this.ghost4);
-    this.ghost5 = new ghosts(game, 'ghost', 4, 240, 1000, 1.5);
+    this.ghost5 = new ghosts(game, 'ghost', '4', 240, 1000, 1.5);
     game.add.existing(this.ghost5);
+
 
     //Hearts
     hearts = game.add.group();
@@ -168,7 +171,6 @@ Level1.prototype = {
         ivFrame = true;
       }
     }
-
     //Plays sound and decrements health when the player hits ghost
     if(game.physics.arcade.overlap(player, this.ghost1) == true
     && hurt == false && ivFrame == false){
@@ -186,6 +188,7 @@ Level1.prototype = {
     && hurt == false && ivFrame == false){
       ouch();
     }
+
 
     //IV Frames
     if(ivFrame == true){
@@ -247,9 +250,9 @@ Level1.prototype = {
     }
   },
   render: function(){
-    game.debug.body(sideAtt);
-    game.debug.body(player);
-    game.debug.body(ghost);
+    //game.debug.body(sideAtt);
+    //game.debug.body(player);
+    //game.debug.body(ghost);
     game.debug.body(door);
   }
 }

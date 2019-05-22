@@ -37,8 +37,6 @@ MainMenu.prototype = {
       { fontSize: '32px', fill: '#FFF' });
     var startText2 = game.add.text(130, 200, 'Press [space] to start.',
       { fontSize: '32px', fill: '#FFF' });
-		var startText2 = game.add.text(130, 200, 'Press [space] to start.',
-	     { fontSize: '32px', fill: '#FFF' });
     console.log('Mainmenu: create');
   },
   update: function(){
