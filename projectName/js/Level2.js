@@ -143,19 +143,19 @@ Level2.prototype = {
     }
     //Plays sound and decrements health when the player hits ghost
     if(game.physics.arcade.overlap(player, this.ghost1) == true
-    && hurt == false && ivFrame == false){
+    && hurt == false && ivFrame == false && !this.ghost1.body.touching.up && !player.body.touching.down){
       ouch();
     } else if(game.physics.arcade.overlap(player, this.ghost2) == true
-    && hurt == false && ivFrame == false){
+    && hurt == false && ivFrame == false && !this.ghost2.body.touching.up && !player.body.touching.down){
       ouch();
     } else if(game.physics.arcade.overlap(player, this.ghost3) == true
-    && hurt == false && ivFrame == false){
+    && hurt == false && ivFrame == false && !this.ghost3.body.touching.up && !player.body.touching.down){
       ouch();
     } else if(game.physics.arcade.overlap(player, this.ghost4) == true
-    && hurt == false && ivFrame == false){
+    && hurt == false && ivFrame == false && !this.ghost4.body.touching.up && !player.body.touching.down){
       ouch();
     } else if(game.physics.arcade.overlap(player, this.ghost5) == true
-    && hurt == false && ivFrame == false){
+    && hurt == false && ivFrame == false && !this.ghost5.body.touching.up && !player.body.touching.down){
       ouch();
     }
 
