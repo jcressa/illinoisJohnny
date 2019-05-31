@@ -24,13 +24,14 @@ var paused = false;
 var pauseText;
 var count = 0;
 
-
 var Level1 = function(game) {this.ghost;};
 Level1.prototype = {
   preload: function(){
     console.log('Play: preload');
     game.load.tilemap('level', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.spritesheet('tilesheet', 'assets/img/B1.png');
+    game.load.image('B1', 'assets/img/B1.png');
+    //game.load.sprite('background', 'assets/img/background.png');
   },
   create: function(){
     console.log('Play: create');
@@ -48,6 +49,7 @@ Level1.prototype = {
     //Background
     //test = game.add.sprite(0,0, 'test');
     back = game.add.sprite(0, 0, 'background');
+    level = game.add.sprite(0,0, 'B1');
     this.map = game.add.tilemap('level');
     this.map.addTilesetImage('textures', 'tilesheet');
     this.map.setCollisionByExclusion([]);
@@ -92,17 +94,21 @@ Level1.prototype = {
     sideAtt.body.enable = false;
 
     //Create ghosts
-    this.ghost1 = new ghosts(game, 'ghost', '4', 130, 920, 1.5);
+     g1Vel = game.rnd.integerInRange(-40,40);
+     g2Vel = game.rnd.integerInRange(-40,40);
+     g3Vel = game.rnd.integerInRange(-40,40);
+     g4Vel = game.rnd.integerInRange(-40,40);
+     g5Vel = game.rnd.integerInRange(-40,40);
+    this.ghost1 = new ghosts(game, 'ghost', '4', 130, 920, g1Vel, 1.5);
     game.add.existing(this.ghost1);
-    this.ghost2 = new ghosts(game, 'ghost', '4', 400, 160, 1.5);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 400, 160, g2Vel, 1.5);
     game.add.existing(this.ghost2);
-    this.ghost3 = new ghosts(game, 'ghost', '4', 340, 1110, 1.5);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 340, 1110, g3Vel, 1.5);
     game.add.existing(this.ghost3);
-    this.ghost4 = new ghosts(game, 'ghost', '4', 430, 920, 1.5);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 430, 920, g4Vel, 1.5);
     game.add.existing(this.ghost4);
-    this.ghost5 = new ghosts(game, 'ghost', '4', 240, 1000, 1.5);
+    this.ghost5 = new ghosts(game, 'ghost', '4', 240, 1000, g5Vel, 1.5);
     game.add.existing(this.ghost5);
-
 
     //Hearts
     hearts = game.add.group();
@@ -254,7 +260,7 @@ Level1.prototype = {
     //game.debug.body(sideAtt);
     //game.debug.body(player);
     //game.debug.body(ghost);
-    game.debug.body(door);
+    //game.debug.body(door);
   }
 }
 

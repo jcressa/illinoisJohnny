@@ -3,14 +3,15 @@
 var Level2 = function(game) {this.ghost;};
 Level2.prototype = {
   preload: function(){
-    game.load.tilemap('level', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.spritesheet('tilesheet', 'assets/img/B1.png');
+    game.load.tilemap('level', 'assets/img/B2.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.spritesheet('tilesheet', 'assets/img/B2.png');
+    game.load.image('B2', 'assets/img/B2.png');
   },
   create: function(){
     console.log('Play: create');
     //Reset player to alive state
     dead = false;
-    heartNum = 3;
+    //heartNum = 3;
     //Enable physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
     //Set world bounds
@@ -22,19 +23,21 @@ Level2.prototype = {
     //Background
     //test = game.add.sprite(0,0, 'test');
     back = game.add.sprite(0, 0, 'background');
+    level = game.add.sprite(0,0, 'B2');
     this.map = game.add.tilemap('level');
-    this.map.addTilesetImage('textures', 'tilesheet');
+    this.map.addTilesetImage('textures2', 'tilesheet');
     this.map.setCollisionByExclusion([]);
-    this.mapLayer = this.map.createLayer('Tile Layer 1');
+    this.mapLayer = this.map.createLayer('Tile Layer 2');
     this.mapLayer.resizeWorld();
 
     //Spikes
     spikes = game.add.group();
-    makeSpikes(504, 288, 4);
-    makeSpikes(384, 528, 5);
-    makeSpikes(120, 648, 3);
-    makeSpikes(408, 960, 4);
-    makeSpikes(0, 1128, 12);
+    makeSpikes(504, 145, 4);
+    makeSpikes(384, 458, 5);
+    makeSpikes(240, 600, 2);
+    makeSpikes(285, 935, 3);
+    makeSpikes(0, 1035, 10);
+    makeSpikes(504, 1222, 2);
 
     //Player
     player = game.add.sprite(32, 32, 'player', '0');
@@ -61,15 +64,20 @@ Level2.prototype = {
     //sideAtt.body.setSize(0, 0, 0, 0);
 
     //Create ghosts
-    this.ghost1 = new ghosts(game, 'ghost', '4', 140, 860, 1.5);
+    var g1Vel = game.rnd.integerInRange(-40,40);
+    var g2Vel = game.rnd.integerInRange(-40,40);
+    var g3Vel = game.rnd.integerInRange(-40,40);
+    var g4Vel = game.rnd.integerInRange(-40,40);
+    var g5Vel = game.rnd.integerInRange(-40,40);
+    this.ghost1 = new ghosts(game, 'ghost', '4', 140, 860, g1Vel, 1.5);
     game.add.existing(this.ghost1);
-    this.ghost2 = new ghosts(game, 'ghost', '4', 32, 200, 1.5);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 32, 200, g2Vel, 1.5);
     game.add.existing(this.ghost2);
-    this.ghost3 = new ghosts(game, 'ghost', '4', 390, 500, 1.5);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 390, 500, g3Vel, 1.5);
     game.add.existing(this.ghost3);
-    this.ghost4 = new ghosts(game, 'ghost', '4', 470, 850, 1.5);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 470, 850, g4Vel, 1.5);
     game.add.existing(this.ghost4);
-    this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, 1.5);
+    this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, g5Vel, 1.5);
     game.add.existing(this.ghost5);
 
 
@@ -158,7 +166,6 @@ Level2.prototype = {
     && hurt == false && ivFrame == false && !this.ghost5.body.touching.up && !player.body.touching.down){
       ouch();
     }
-
 
     //IV Frames
     if(ivFrame == true){
