@@ -21,6 +21,8 @@ MainMenu.prototype = {
     game.load.image('spike', 'assets/img/spikes_24.png');
     game.load.image('heart', 'assets/img/heart_full.png');
     game.load.image('heartHalf', 'assets/img/heart_half.png');
+		game.load.image('light', 'assets/img/light.png');
+		game.load.image('black', 'assets/img/black.png');
     game.load.image('door', 'assets/img/door.png');
     game.load.audio('oof', 'assets/audio/oof.mp3');
     game.load.atlas('pAtlas', 'assets/img/player.png', 'assets/img/player.json');

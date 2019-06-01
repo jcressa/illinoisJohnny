@@ -80,6 +80,14 @@ Level2.prototype = {
     this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, g5Vel, 1.5);
     game.add.existing(this.ghost5);
 
+    //black
+    //black = game.add.sprite(0, 0, 'black');
+    //light
+    light = game.add.sprite(0, 0, 'light');
+    game.physics.arcade.enable(light);
+    light.scale.setTo(1.75, 1.75);
+    light.anchor.set(0.5);
+    light.alpha = 0.9;
 
     //Hearts
     hearts = game.add.group();
@@ -93,6 +101,10 @@ Level2.prototype = {
     game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER, 0.2, 0.2);
   },
   update: function(){
+    //light movement
+    light.body.x = player.body.x - 840;
+    light.body.y = player.body.y - 890;
+
     //Hearts move ith camera
     hearts.y = game.camera.y + 16;
     //Player collisions
