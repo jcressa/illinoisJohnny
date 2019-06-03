@@ -27,24 +27,32 @@ Level2.prototype = {
     this.map = game.add.tilemap('level');
     this.map.addTilesetImage('textures2', 'tilesheet');
     this.map.setCollisionByExclusion([]);
-    this.mapLayer = this.map.createLayer('Tile Layer 2');
-    this.mapLayer.resizeWorld();
+    mapLayer = this.map.createLayer('Tile Layer 2');
+    mapLayer.resizeWorld();
 
     //Spikes
     spikes = game.add.group();
-    makeSpikes(504, 145, 4);
-    makeSpikes(384, 458, 5);
-    makeSpikes(240, 600, 2);
-    makeSpikes(285, 935, 3);
-    makeSpikes(0, 1035, 10);
-    makeSpikes(504, 1222, 2);
+    makeSpikes(144, 120, 1);
+    makeSpikes(96, 288, 1);
+    makeSpikes(480, 336, 1);
+    makeSpikes(312, 480, 1);
+    makeSpikes(504, 480, 1);
+    makeSpikes(120, 576, 3);
+    makeSpikes(240, 600, 1);
+    makeSpikes(48, 720, 1);
+    makeSpikes(312, 936, 2);
+    makeSpikes(0, 1032, 3);
+    makeSpikes(336, 1104, 2);
+    makeSpikes(120, 1152, 1);
+    makeSpikes(192, 1344, 6);
+    makeSpikes(504,1344, 4);
 
     //Player
     player = game.add.sprite(32, 32, 'player', '0');
     player.anchor.set(0.5);
     player.scale.setTo(1.5, 1.5);
     game.physics.arcade.enable(player);
-    player.body.setSize(24, 32, 5, 0);
+    player.body.setSize(13, 32, 10, 0);
     player.body.bounce.y = 0;
     player.body.gravity.y = playerGravity;
     player.body.collideWorldBounds = true;
@@ -108,8 +116,7 @@ Level2.prototype = {
     //Hearts move ith camera
     hearts.y = game.camera.y + 16;
     //Player collisions
-    game.physics.arcade.collide(player, this.mapLayer);
-    game.physics.arcade.collide(this.mapLayer, spikes);
+    game.physics.arcade.collide(player, mapLayer);
 
     //Creates collision between player and platforms
     this.isGrounded = player.body.blocked.down;
