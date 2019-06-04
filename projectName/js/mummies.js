@@ -10,7 +10,7 @@ function mummies(game, key, frame, xPos, yPos, scale){
     this.body.immovable = true;
     this.body.setSize(18, 32, 7, 0);
     this.body.gravity.y = playerGravity;
-    this.body.velocity.x = mummySpeed; 
+    this.body.velocity.x = mummySpeed;
     //Animations
     //Moving mummies left and right
     this.animations.add('left', [0,1,2], 3, true);
@@ -39,12 +39,12 @@ mummies.prototype.update = function(){
 
   this.isGrounded = this.body.blocked.down;
 
-    // player is touching bottom 
+    // player is touching bottom
     // ghost touching up
     // automatically jump when both make contact
     if(this.body.touching.up && player.body.touching.down){
       player.body.velocity.y = -playerJump/2;
-    } else if(this.body.touching.left && player.body.touching.right && 
+    } else if(this.body.touching.left && player.body.touching.right &&
     	hurt == false && ivFrame == false) {
     	ouch();
     	player.body.velocity.y = -200;

@@ -48,7 +48,7 @@ Level2.prototype = {
     makeSpikes(504,1344, 4);
 
     //Player
-    player = game.add.sprite(32, 32, 'player', '0');
+    player = game.add.sprite(16, 32, 'player');
     player.anchor.set(0.5);
     player.scale.setTo(1.5, 1.5);
     game.physics.arcade.enable(player);
@@ -77,25 +77,49 @@ Level2.prototype = {
     var g3Vel = game.rnd.integerInRange(-40,40);
     var g4Vel = game.rnd.integerInRange(-40,40);
     var g5Vel = game.rnd.integerInRange(-40,40);
-    this.ghost1 = new ghosts(game, 'ghost', '4', 140, 860, g1Vel, 1.5);
+    this.ghost1 = new ghosts(game, 'ghost', '4', 264, 336, g1Vel, 1.5);
     game.add.existing(this.ghost1);
-    this.ghost2 = new ghosts(game, 'ghost', '4', 32, 200, g2Vel, 1.5);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 192, 744, g2Vel, 1.5);
     game.add.existing(this.ghost2);
-    this.ghost3 = new ghosts(game, 'ghost', '4', 390, 500, g3Vel, 1.5);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 552, 1080, g3Vel, 1.5);
     game.add.existing(this.ghost3);
-    this.ghost4 = new ghosts(game, 'ghost', '4', 470, 850, g4Vel, 1.5);
+    this.ghost4 = new ghosts(game, 'ghost', '4', 48, 1200, g4Vel, 1.5);
     game.add.existing(this.ghost4);
-    this.ghost5 = new ghosts(game, 'ghost', '4', 200, 750, g5Vel, 1.5);
-    game.add.existing(this.ghost5);
+
+    // Create Mummies
+    this.mummy1 = new mummies(game, 'mummy', '2', 408, 432, 1.3);
+    game.add.existing(this.mummy1);
+    this.mummy2 = new mummies(game, 'mummy', '2', 144, 552, 1.3);
+    game.add.existing(this.mummy2);
+    this.mummy3 = new mummies(game, 'mummy', '2', 480, 672, 1.3);
+    game.add.existing(this.mummy3);
+    this.mummy4 = new mummies(game, 'mummy', '2', 96, 1008, 1.3);
+    game.add.existing(this.mummy4);
+    this.mummy5 = new mummies(game, 'mummy', '2', 288, 1320, 1.3);
+    game.add.existing(this.mummy5);
+
+    //Invisible walls
+    walls = game.add.group();
+    makeWalls(312,456);
+    makeWalls(504, 456);
+    makeWalls(48, 576);
+    makeWalls(240, 576);
+    makeWalls(384, 696);
+    makeWalls(240, 1032);
 
     //black
     //black = game.add.sprite(0, 0, 'black');
     //light
     light = game.add.sprite(0, 0, 'light');
     game.physics.arcade.enable(light);
-    light.scale.setTo(1.75, 1.75);
+    light.scale.setTo(1.9, 1.9);
     light.anchor.set(0.5);
     light.alpha = 0.9;
+    glow = game.add.sprite(0, 0, 'glow');
+    game.physics.arcade.enable(glow);
+    glow.scale.setTo(1.2, 1.2);
+    glow.anchor.set(0.5);
+    glow.alpha = 0.3;
 
     //Hearts
     hearts = game.add.group();
@@ -110,8 +134,10 @@ Level2.prototype = {
   },
   update: function(){
     //light movement
-    light.body.x = player.body.x - 840;
-    light.body.y = player.body.y - 890;
+    light.body.x = player.body.x - 940;
+    light.body.y = player.body.y - 670;
+    glow.body.x = player.body.x - 290;
+    glow.body.y = player.body.y - 230;
 
     //Hearts move ith camera
     hearts.y = game.camera.y + 16;

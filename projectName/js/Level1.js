@@ -84,6 +84,10 @@ Level1.prototype = {
     pLeft = player.animations.add('left', [4, 5, 6], 10, true);
     //Moving player right
     pRight = player.animations.add('right', [1, 2, 3], 10, true);
+    //attack player left
+    leftA = player.animations.add('leftA', [0, 1, 2, 3], 1, true);
+    //attack player right
+    rightA = player.animations.add('rightA', [0, 1, 2, 3], 1, true);
 
     //Hitboxes
     hitboxes = game.add.group();
@@ -108,7 +112,7 @@ Level1.prototype = {
     game.add.existing(this.ghost4);
     this.ghost5 = new ghosts(game, 'ghost', '4', 240, 1000, g5Vel, 1.5);
     game.add.existing(this.ghost5);
-    
+
     // Create Mummies
     this.mummy1 = new mummies(game, 'mummy', '2', 48,264, 1.3);
     game.add.existing(this.mummy1);
@@ -135,9 +139,14 @@ Level1.prototype = {
     //light
     light = game.add.sprite(0, 0, 'light');
     game.physics.arcade.enable(light);
-    light.scale.setTo(1.75, 1.75);
+    light.scale.setTo(1.9, 1.9);
     light.anchor.set(0.5);
     light.alpha = 0.9;
+    glow = game.add.sprite(0, 0, 'glow');
+    game.physics.arcade.enable(glow);
+    glow.scale.setTo(1.2, 1.2);
+    glow.anchor.set(0.5);
+    glow.alpha = 0.3;
 
 
     //Hearts
@@ -153,8 +162,10 @@ Level1.prototype = {
   },
   update: function(){
     //light movement
-    light.body.x = player.body.x - 840;
-    light.body.y = player.body.y - 890;
+    light.body.x = player.body.x - 940;
+    light.body.y = player.body.y - 670;
+    glow.body.x = player.body.x - 290;
+    glow.body.y = player.body.y - 230;
 
     //Hearts move ith camera
     hearts.y = game.camera.y + 16;
@@ -327,9 +338,11 @@ function makeHitBox(){
   if(last == 0){
     //sideAtt.scale.setTo(-1, 1);
     sideAtt.body.setSize(48,16,-50,-10);
+    player.animations.play('leftA');
   } else if(last == 1){
     //sideAtt.scale.setTo(1, 1);
     sideAtt.body.setSize(48,16, 0, -10);
+    player.animations.play('rightA');
   }
   sideAtt.body.allowGravity = false;
   sideAtt.body.enable = true;
