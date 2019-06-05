@@ -38,7 +38,6 @@ Level2.prototype = {
     makeSpikes(312, 480, 1);
     makeSpikes(504, 480, 1);
     makeSpikes(120, 576, 3);
-    makeSpikes(240, 600, 1);
     makeSpikes(48, 720, 1);
     makeSpikes(312, 936, 2);
     makeSpikes(0, 1032, 3);
