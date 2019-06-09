@@ -23,6 +23,7 @@ var ivFrame = false;
 var paused = false;
 var pauseText;
 var count = 0;
+var mCount = 0;
 
 var Level1 = function(game) {this.ghost;};
 Level1.prototype = {
@@ -45,6 +46,7 @@ Level1.prototype = {
 
     //Add noise
     oof = game.add.audio('oof');
+    mummy = game.add.audio('mummy');
 
     //Background
     back = game.add.sprite(0, 0, 'background');
@@ -124,6 +126,8 @@ Level1.prototype = {
     game.add.existing(this.mummy4);
     this.mummy5 = new mummies(game, 'mummy', '2', 384, 506, 1.3);
     game.add.existing(this.mummy5);
+    this.mummy6 = new mummies(game, 'mummy', '2', 384, 1000, 1.3);
+    game.add.existing(this.mummy6);
 
     //Invisible walls
     walls = game.add.group();
@@ -163,6 +167,16 @@ Level1.prototype = {
     game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER, 0.2, 0.2);
   },
   update: function(){
+    if(player.body.velocity.y > 700){
+      player.body.velocity.y = 700;
+    }
+    //mummy noise
+    if(mCount < 500){
+      mCount++;
+    } else {
+      mummy.play();
+      mCount = 0;
+    }
     //light movement
     light.body.x = player.body.x - 940;
     light.body.y = player.body.y - 670;

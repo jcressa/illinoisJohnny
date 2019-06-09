@@ -19,6 +19,7 @@ Level3.prototype = {
 
     //Add noise
     oof = game.add.audio('oof');
+    mummy = game.add.audio('mummy');
 
     //Background
     //test = game.add.sprite(0,0, 'test');
@@ -144,6 +145,16 @@ Level3.prototype = {
     game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER, 0.2, 0.2);
   },
   update: function(){
+    if(player.body.velocity.y > 700){
+      player.body.velocity.y = 700;
+    }
+    //mummy noise
+    if(mCount < 500){
+      mCount++;
+    } else {
+      mummy.play();
+      mCount = 0;
+    }
     //light movement
     light.body.x = player.body.x - 940;
     light.body.y = player.body.y - 670;
