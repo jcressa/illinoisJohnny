@@ -7,8 +7,11 @@ var space;
 window.onload = function() {
 	game = new Phaser.Game(600, 600, Phaser.AUTO);
 	game.state.add('MainMenu', MainMenu);
+	game.state.add('Instructions', Instructions);
 	game.state.add('Level1', Level1);
 	game.state.add('Level2', Level2);
+	game.state.add('Level3', Level3);
+	game.state.add('Winner', Winner);
 	game.state.add('GameOver', GameOver);
 	game.state.start('MainMenu');
 }
@@ -30,16 +33,23 @@ MainMenu.prototype = {
 		game.load.image('johnny', 'assets/img/johnny.png');
 		game.load.image('opening', 'assets/img/opening.jpg');
 		game.load.image('title', 'assets/img/title.png');
+		game.load.image('restart', 'assets/img/restart.png');
 		game.load.image('glow', 'assets/img/glow.png');
+		game.load.image('instructions', 'assets/img/instructions.png');
+		game.load.image('instructions2', 'assets/img/instructions2.png');
+		game.load.image('frame', 'assets/img/frame.png');
 		game.load.image('space', 'assets/img/space.png');
 		game.load.image('gameover', 'assets/img/gameover.png');
+		game.load.image('treasure', 'assets/img/treasure.png');
+		game.load.image('win', 'assets/img/win.png');
+		game.load.image('winJohnny', 'assets/img/winJohnny.png');
     game.load.audio('oof', 'assets/audio/oof.mp3');
 		game.load.audio('music', 'assets/audio/music.mp3');
 		game.load.audio('mummy', 'assets/audio/mummy.mp3');
     game.load.atlas('pAtlas', 'assets/img/player.png', 'assets/img/player.json');
     game.load.spritesheet('ghost', 'assets/img/ghost.png', 32, 24);
 		game.load.spritesheet('mummy', 'assets/img/mummy.png', 32, 24);
-    game.load.spritesheet('player', 'assets/img/player2.png', 32, 24);
+    game.load.spritesheet('player', 'assets/img/player2.png', 32, 32);
 		game.load.spritesheet('leftA', 'assets/img/leftA.png', 32, 24);
 		game.load.spritesheet('rightA', 'assets/img/rightA.png', 32, 24);
     game.stage.backgroundColor = "#8A8A8A";
@@ -78,7 +88,8 @@ MainMenu.prototype = {
     }
 
     if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-      game.state.start('Level1');
+			music.stop();
+      game.state.start('Instructions');
     }
   }
 }

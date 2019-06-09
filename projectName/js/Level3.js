@@ -1,43 +1,17 @@
-/*
-Game: Illinois Johnny
-Group #: 55
-Names: Joey Cressa, Eric Tseng, Sandy Evsanaa
-Github: https://github.com/jcressa/illinoisJohnny
-*/
+// Level3
 
-var playerGravity = 2000;
-var playerJump = 725
-var playerSpeed = 350;
-var yHeart = 5;
-var hurt = false;
-var heartNum = 3;
-var heart1;
-var heart2;
-var heart3;
-var dead = false;
-var ghostCounter = 0;
-var last = 0;
-var lastFrame = 5;
-var ivCount = 0;
-var ivFrame = false;
-var paused = false;
-var pauseText;
-var count = 0;
-
-var Level1 = function(game) {this.ghost;};
-Level1.prototype = {
+var Level3 = function(game) {this.ghost;};
+Level3.prototype = {
   preload: function(){
-    console.log('Play: preload');
-    game.load.tilemap('level', 'assets/img/B1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.spritesheet('tilesheet', 'assets/img/B1.png');
-    game.load.image('B1', 'assets/img/B1.png');
-    //game.load.sprite('background', 'assets/img/background.png');
+    game.load.tilemap('level', 'assets/img/B3.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.spritesheet('tilesheet', 'assets/img/B3.png');
+    game.load.image('B3', 'assets/img/B3.png');
   },
   create: function(){
     console.log('Play: create');
     //Reset player to alive state
     dead = false;
-    heartNum = 3;
+    //heartNum = 3;
     //Enable physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
     //Set world bounds
@@ -47,30 +21,41 @@ Level1.prototype = {
     oof = game.add.audio('oof');
 
     //Background
+    //test = game.add.sprite(0,0, 'test');
     back = game.add.sprite(0, 0, 'background');
-    level = game.add.sprite(0,0, 'B1');
+    level = game.add.sprite(0,0, 'B3');
     this.map = game.add.tilemap('level');
-    this.map.addTilesetImage('textures', 'tilesheet');
+    this.map.addTilesetImage('textures3', 'tilesheet');
     this.map.setCollisionByExclusion([]);
-    mapLayer = this.map.createLayer('Tile Layer 1');
+    mapLayer = this.map.createLayer('Tile Layer 3');
     mapLayer.resizeWorld();
 
     //Spikes
     spikes = game.add.group();
-    makeSpikes(504, 288, 4);
-    makeSpikes(384, 528, 5);
-    makeSpikes(120, 648, 3);
-    makeSpikes(408, 960, 4);
-    makeSpikes(0, 1128, 12);
-
-    //door
-    door = game.add.sprite(450, 1050, 'door');
-    door.scale.setTo(.15, .15);
-    game.physics.arcade.enable(door);
-    door.body.setSize(200,400,280,300);
+    makeSpikes(72,72,1);
+    makeSpikes(504,72,1);
+    makeSpikes(168, 336 , 1);
+    makeSpikes(408, 336, 1);
+    makeSpikes(264, 360,3);
+    makeSpikes(48,456,1);
+    makeSpikes(528,456,1);
+    makeSpikes(72, 480 , 2);
+    makeSpikes(480,480,2);
+    makeSpikes(216, 600, 1);
+    makeSpikes(360, 600 ,1);
+    makeSpikes(0, 816 , 3);
+    makeSpikes(528, 816 , 3);
+    makeSpikes(0, 960, 3);
+    makeSpikes(192, 984, 2);
+    makeSpikes(432,1056, 3);
+    makeSpikes(264, 1104, 1);
+    makeSpikes(144,1128,2);
+    makeSpikes(504,1200,2);
+    makeSpikes(216, 1272, 2);
+    makeSpikes(360, 1272 ,2);
 
     //Player
-    player = game.add.sprite(32, 32, 'player', '0');
+    player = game.add.sprite(400, 32, 'player');
     player.anchor.set(0.5);
     player.scale.setTo(1.5, 1.5);
     game.physics.arcade.enable(player);
@@ -84,10 +69,6 @@ Level1.prototype = {
     pLeft = player.animations.add('left', [4, 5, 6], 10, true);
     //Moving player right
     pRight = player.animations.add('right', [1, 2, 3], 10, true);
-    //attack player left
-    leftA = player.animations.add('leftA', [0, 1, 2, 3], 1, true);
-    //attack player right
-    rightA = player.animations.add('rightA', [0, 1, 2, 3], 1, true);
 
     //Hitboxes
     hitboxes = game.add.group();
@@ -95,44 +76,45 @@ Level1.prototype = {
     player.addChild(hitboxes);
     sideAtt = hitboxes.create(0,0,null);
     sideAtt.body.enable = false;
+    //sideAtt.body.setSize(0, 0, 0, 0);
 
     //Create ghosts
-    g1Vel = game.rnd.integerInRange(-40,40);
-    g2Vel = game.rnd.integerInRange(-40,40);
-    g3Vel = game.rnd.integerInRange(-40,40);
-    g4Vel = game.rnd.integerInRange(-40,40);
-    g5Vel = game.rnd.integerInRange(-40,40);
-    this.ghost1 = new ghosts(game, 'ghost', '4', 130, 920, g1Vel, 1.5);
+    var g1Vel = game.rnd.integerInRange(-40,40);
+    var g2Vel = game.rnd.integerInRange(-40,40);
+    var g3Vel = game.rnd.integerInRange(-40,40);
+    var g4Vel = game.rnd.integerInRange(-40,40);
+    var g5Vel = game.rnd.integerInRange(-40,40);
+    this.ghost1 = new ghosts(game, 'ghost', '4', 288, 552, g1Vel, 1.5);
     game.add.existing(this.ghost1);
-    this.ghost2 = new ghosts(game, 'ghost', '4', 400, 160, g2Vel, 1.5);
+    this.ghost2 = new ghosts(game, 'ghost', '4', 456, 960, g2Vel, 1.5);
     game.add.existing(this.ghost2);
-    this.ghost3 = new ghosts(game, 'ghost', '4', 340, 1110, g3Vel, 1.5);
+    this.ghost3 = new ghosts(game, 'ghost', '4', 48, 1128, g3Vel, 1.5);
     game.add.existing(this.ghost3);
-    this.ghost4 = new ghosts(game, 'ghost', '4', 430, 920, g4Vel, 1.5);
-    game.add.existing(this.ghost4);
-    this.ghost5 = new ghosts(game, 'ghost', '4', 240, 1000, g5Vel, 1.5);
-    game.add.existing(this.ghost5);
 
     // Create Mummies
-    this.mummy1 = new mummies(game, 'mummy', '2', 48,264, 1.3);
+    this.mummy1 = new mummies(game, 'mummy', '2', 24, 24, 1.3);
     game.add.existing(this.mummy1);
-    this.mummy2 = new mummies(game, 'mummy', '2', 360, 744, 1.3);
+    this.mummy2 = new mummies(game, 'mummy', '2', 552, 24, 1.3);
     game.add.existing(this.mummy2);
-    this.mummy3 = new mummies(game, 'mummy', '2', 216, 744, 1.3);
+    this.mummy3 = new mummies(game, 'mummy', '2', 216, 672, 1.3);
     game.add.existing(this.mummy3);
-    this.mummy4 = new mummies(game, 'mummy', '2', 552, 744, 1.3);
+    this.mummy4 = new mummies(game, 'mummy', '2', 96, 1344, 1.3);
     game.add.existing(this.mummy4);
-    this.mummy5 = new mummies(game, 'mummy', '2', 384, 506, 1.3);
+    this.mummy5 = new mummies(game, 'mummy', '2', 504, 1344, 1.3);
     game.add.existing(this.mummy5);
 
     //Invisible walls
     walls = game.add.group();
-    makeWalls(144,288);
-    makeWalls(96, 768);
-    makeWalls(168, 768);
-    makeWalls(408,768);
-    makeWalls(480, 768);
-    makeWalls(264, 528);
+    makeWalls(144,696);
+    makeWalls(432, 696);
+    makeWalls(192, 1368);
+    makeWalls(408, 1368);
+
+    //treasure
+    treasure = game.add.sprite(275, 1332, 'treasure');
+    treasure.scale.setTo(.7, .7);
+    game.physics.arcade.enable(treasure);
+
 
     //black
     //black = game.add.sprite(0, 0, 'black');
@@ -141,13 +123,12 @@ Level1.prototype = {
     game.physics.arcade.enable(light);
     light.scale.setTo(1.9, 1.9);
     light.anchor.set(0.5);
-    light.alpha = 0.85;
+    light.alpha = 0.9;
     glow = game.add.sprite(0, 0, 'glow');
     game.physics.arcade.enable(glow);
     glow.scale.setTo(1.2, 1.2);
     glow.anchor.set(0.5);
     glow.alpha = 0.3;
-
 
     //Hearts
     frame = game.add.sprite(420, 0, 'frame');
@@ -225,7 +206,6 @@ Level1.prototype = {
         ivFrame = true;
       }
     }
-
     //Plays sound and decrements health when the player hits ghost
     if(game.physics.arcade.overlap(player, this.ghost1) == true
     && hurt == false && ivFrame == false && !this.ghost1.body.touching.up && !player.body.touching.down){
@@ -293,9 +273,8 @@ Level1.prototype = {
       game.time.events.add(Phaser.Timer.SECOND * 1, killBox, this);
     }
 
-    //door
-    if(game.physics.arcade.overlap(player, door) == true){
-      game.state.start('Level2');
+    if(game.physics.arcade.overlap(player, treasure) == true){
+      game.state.start('Winner');
     }
 
     //Death
@@ -307,100 +286,5 @@ Level1.prototype = {
     //game.debug.body(sideAtt);
     //game.debug.body(player);
     //game.debug.body(ghost);
-    //game.debug.body(door);
-  }
-}
-
-//Creates a line of spikes
-function makeSpikes(xPos, yPos, n){
-  for(var i = 0; i < n; i += 1){
-    var spike = spikes.create(xPos,yPos, 'spike');
-    game.physics.arcade.enable(spike);
-    spike.enableBody = true;
-    spike.body.immovable = true;
-    xPos += 24;
-  }
-}
-
-//Creates invisible walls so mummies don't fall off
-function makeWalls(xPos, yPos){
-  var wall = walls.create(xPos, yPos, 'wall');
-  game.physics.arcade.enable(wall);
-  wall.enableBody = true;
-  wall.body.immovable = true;
-  wall.body.gravity = false;
-  wall.alpha = 0;
-}
-
-//Creates players attack hitbox
-function makeHitBox(){
-  //Side Attack
-  attacked = true;
-  sideAtt = hitboxes.create(0,0,null);
-  sideAtt.body.setSize(0,0,0,0);
-  if(last == 0){
-    //sideAtt.scale.setTo(-1, 1);
-    sideAtt.body.setSize(48,16,-50,-10);
-    player.animations.play('leftA');
-  } else if(last == 1){
-    //sideAtt.scale.setTo(1, 1);
-    sideAtt.body.setSize(48,16, 0, -10);
-    player.animations.play('rightA');
-  }
-  sideAtt.body.allowGravity = false;
-  sideAtt.body.enable = true;
-}
-
-//Destroys the hitbox off the attack
-function killBox(){
-  sideAtt.destroy();
-}
-
-function ouch(){
-  oof.play();
-  hurt = true;
-  heartNum -= .5;
-  health(heartNum);
-  if(ivFrame == false){
-    ivFrame = true;
-  }
-}
-
-//Updates the players current health
-function health(heartNum){
-  hearts = game.add.group();
-  //Kills off previous heart sprites and creates new updated health
-  if(heartNum == 3){
-    heart1 = hearts.create(450,yHeart, 'heart');
-    heart2 = hearts.create(500,yHeart, 'heart');
-    heart3 = hearts.create(550,yHeart, 'heart');
-  } else if(heartNum == 2.5){
-    heart1.kill();
-    heart2.kill();
-    heart3.kill();
-    heart1 = hearts.create(450,yHeart, 'heart');
-    heart2 = hearts.create(500,yHeart, 'heart');
-    heart3 = hearts.create(550,yHeart, 'heartHalf');
-  } else if(heartNum == 2){
-    heart1.kill();
-    heart2.kill();
-    heart3.kill();
-    heart1 = hearts.create(450,yHeart, 'heart');
-    heart2 = hearts.create(500,yHeart, 'heart');
-  } else if(heartNum == 1.5){
-    heart1.kill();
-    heart2.kill();
-    heart1 = hearts.create(450,yHeart, 'heart');
-    heart2 = hearts.create(500,yHeart, 'heartHalf');
-  } else if(heartNum == 1){
-    heart1.kill();
-    heart2.kill();
-    heart1 = hearts.create(450,yHeart, 'heart');
-  } else if(heartNum == .5){
-    heart1.kill();
-    heart1 = hearts.create(450,yHeart, 'heartHalf');
-  } else {
-    heart1.kill();
-    dead = true;
   }
 }

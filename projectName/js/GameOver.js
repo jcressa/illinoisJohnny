@@ -10,8 +10,10 @@ GameOver.prototype = {
     //Starting screen text
     back = game.add.sprite(0, 0, 'background');
     //game.stage.backgroundColor = "#8A8A8A";
-    gameover = game.add.sprite(100, 100, 'gameover');
+    gameover = game.add.sprite(110, 100, 'gameover');
 		gameover.scale.setTo(.8, .8);
+    restart = game.add.sprite(70, 300, 'restart');
+		restart.scale.setTo(.5, .5);
 
     //var gameOverText = game.add.text(200, 100, 'Game Over',
       //{ fontSize: '32px', fill: '#FFF' });
@@ -20,7 +22,7 @@ GameOver.prototype = {
   },
   update: function(){
     if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-      game.state.start('MainMenu');
+      game.state.start('Level1');
     }
   }
 }

@@ -46,6 +46,12 @@ Level2.prototype = {
     makeSpikes(192, 1344, 6);
     makeSpikes(504,1344, 4);
 
+    //door
+    door = game.add.sprite(30, 1265, 'door');
+    door.scale.setTo(.15, .15);
+    game.physics.arcade.enable(door);
+    door.body.setSize(200,400,280,300);
+
     //Player
     player = game.add.sprite(16, 32, 'player');
     player.anchor.set(0.5);
@@ -121,6 +127,8 @@ Level2.prototype = {
     glow.alpha = 0.3;
 
     //Hearts
+    frame = game.add.sprite(420, 0, 'frame');
+    frame.scale.setTo(.27, .12);
     hearts = game.add.group();
     health(heartNum);
 
@@ -140,6 +148,7 @@ Level2.prototype = {
 
     //Hearts move ith camera
     hearts.y = game.camera.y + 16;
+    frame.y = game.camera.y + 5;
     //Player collisions
     game.physics.arcade.collide(player, mapLayer);
 
@@ -258,6 +267,11 @@ Level2.prototype = {
     if(game.input.keyboard.downDuration(Phaser.Keyboard.F)){
       makeHitBox();
       game.time.events.add(Phaser.Timer.SECOND * 1, killBox, this);
+    }
+
+    //door
+    if(game.physics.arcade.overlap(player, door) == true){
+      game.state.start('Level3');
     }
 
     //Death
