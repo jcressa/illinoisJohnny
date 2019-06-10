@@ -165,6 +165,15 @@ Level1.prototype = {
 
     // make camera follow player
     game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER, 0.2, 0.2);
+
+    // Pauses the game
+	  pause_label = game.add.text(500, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
+    pause_label.inputEnabled = true;
+    pause_label.events.onInputUp.add(function () {
+        // When the pause button is pressed, pause the game
+        game.paused = true;
+    });
+    
   },
   update: function(){
     if(player.body.velocity.y > 700){
@@ -270,25 +279,8 @@ Level1.prototype = {
         hurt = false;
       }
     }
-
-    //In-game pause
-    if(game.input.keyboard.downDuration(Phaser.Keyboard.P)){
-      if(paused == false){
-        player.body.velocity.x = 0;
-        player.body.velocity.y = 0;
-        player.body.gravity.y = 0;
-        player.animations.stop(null, true);
-        paused = true;
-        pauseText.x = game.camera.x + 120;
-        pauseText.y = game.camera.y + 250;
-        pauseText.alpha = 1;
-      } else {
-        paused = false;
-        player.animations.play('left');
-        player.body.gravity.y = playerGravity;
-        pauseText.alpha = 0;
-      }
-    }
+    // unpauses the game when u click anywhere
+    game.input.onDown.add(unpause, self);
 
     //Checks if the player has moved off of the spikes to reset
     if(game.physics.arcade.overlap(player, spikes) == false
@@ -323,6 +315,12 @@ Level1.prototype = {
     //game.debug.body(ghost);
     //game.debug.body(door);
   }
+}
+
+// Unpauses the game when called
+function unpause(){
+	game.paused = false;
+	paused = false;
 }
 
 //Creates a line of spikes
