@@ -12,10 +12,11 @@ Instructions.prototype = {
     //game.stage.backgroundColor = "#8A8A8A";
     instructions = game.add.sprite(60, 70, 'instructions');
 		instructions.scale.setTo(.8, .8);
-    instructions2 = game.add.sprite(20, 240, 'instructions2');
+    instructions2 = game.add.sprite(120, 220, 'instructions2');
     instructions2.scale.setTo(.4, .4);
-    space = game.add.sprite(110, 520, 'space');
+    space = game.add.sprite(100, 450, 'space');
 		space.scale.setTo(.4, .4);
+    skip = game.add.text(80, 520, '(Also, you can press "S" to skip a level)', { font: '24px Arial', fill: '#fff' });
 
   },
   update: function(){
@@ -30,6 +31,7 @@ Instructions.prototype = {
     }
 
     if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+      music.stop();
       game.state.start('Level1');
     }
   }

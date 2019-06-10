@@ -88,7 +88,6 @@ MainMenu.prototype = {
     }
 
     if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-			music.stop();
       game.state.start('Instructions');
     }
   }

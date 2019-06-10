@@ -25,18 +25,10 @@ mummies.prototype = Object.create(Phaser.Sprite.prototype);
 mummies.prototype.constructor = mummies;
 
 mummies.prototype.update = function(){
-  hitMummy = game.physics.arcade.overlap(sideAtt, this);
-
-
-  if(hitMummy){
-    this.kill();
-  }
-
   // Checking collisions with the ghosts and player
   game.physics.arcade.collide(this, mapLayer);
   game.physics.arcade.collide(this, player);
   game.physics.arcade.collide(this, walls);
-
   this.isGrounded = this.body.blocked.down;
 
     // player is touching bottom
@@ -56,13 +48,12 @@ mummies.prototype.update = function(){
     	player.body.velocity.x = 3000;
     }
 
-
     if(this.body.touching.left || this.body.blocked.left) {
     	this.body.velocity.x = mummySpeed;
     	this.animations.play('right');
-	} else if(this.body.touching.right || this.body.blocked.right){
-		this.body.velocity.x = -mummySpeed;
-		this.animations.play('left');
-	}
+	  } else if(this.body.touching.right || this.body.blocked.right){
+		   this.body.velocity.x = -mummySpeed;
+		   this.animations.play('left');
+	  }
 
 }

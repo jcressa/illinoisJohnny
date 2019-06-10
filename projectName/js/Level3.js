@@ -71,14 +71,6 @@ Level3.prototype = {
     //Moving player right
     pRight = player.animations.add('right', [1, 2, 3], 10, true);
 
-    //Hitboxes
-    hitboxes = game.add.group();
-    hitboxes.enableBody = true;
-    player.addChild(hitboxes);
-    sideAtt = hitboxes.create(0,0,null);
-    sideAtt.body.enable = false;
-    //sideAtt.body.setSize(0, 0, 0, 0);
-
     //Create ghosts
     var g1Vel = game.rnd.integerInRange(-40,40);
     var g2Vel = game.rnd.integerInRange(-40,40);
@@ -116,9 +108,6 @@ Level3.prototype = {
     treasure.scale.setTo(.7, .7);
     game.physics.arcade.enable(treasure);
 
-
-    //black
-    //black = game.add.sprite(0, 0, 'black');
     //light
     light = game.add.sprite(0, 0, 'light');
     game.physics.arcade.enable(light);
@@ -137,12 +126,16 @@ Level3.prototype = {
     hearts = game.add.group();
     health(heartNum);
 
-    //Pause text
-    pauseText = game.add.text(game.camera.x + 120, game.camera.y + 250, 'Paused', { fontSize: '100px', fill: '#000' });
-    pauseText.alpha = 0;
-
     // make camera follow player
     game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER, 0.2, 0.2);
+
+    // Pauses the game
+	  pause_label = game.add.text(520, 80, 'Pause', { font: '24px Arial', fill: '#fff' });
+    pause_label.inputEnabled = true;
+    pause_label.events.onInputUp.add(function () {
+        // When the pause button is pressed, pause the game
+        game.paused = true;
+    });
   },
   update: function(){
     if(player.body.velocity.y > 700){
@@ -247,6 +240,8 @@ Level3.prototype = {
         hurt = false;
       }
     }
+    // unpauses the game when u click anywhere
+    game.input.onDown.add(unpause, self);
 
     //In-game pause
     if(game.input.keyboard.downDuration(Phaser.Keyboard.P)){
@@ -278,14 +273,16 @@ Level3.prototype = {
       hurt = false;
     }
 
-    //Attack
-    if(game.input.keyboard.downDuration(Phaser.Keyboard.F)){
-      makeHitBox();
-      game.time.events.add(Phaser.Timer.SECOND * 1, killBox, this);
-    }
-
     if(game.physics.arcade.overlap(player, treasure) == true){
       game.state.start('Winner');
+    }
+
+    if(game.input.keyboard.isDown(Phaser.Keyboard.R)){
+      game.state.start('MainMenu');
+    }
+
+    if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
+      game.state.start('GameOver');
     }
 
     //Death

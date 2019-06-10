@@ -23,12 +23,6 @@ ghosts.prototype = Object.create(Phaser.Sprite.prototype);
 ghosts.prototype.constructor = ghosts;
 
 ghosts.prototype.update = function(){
-  hitGhost = game.physics.arcade.overlap(sideAtt, this);
-
-  if(hitGhost){
-    this.kill();
-  }
-
   // Checking collisions with the ghosts and player
   game.physics.arcade.collide(player.body.x, this);
 
